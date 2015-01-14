@@ -16,6 +16,8 @@ get_header(); ?>
 
 			<section  id="page-loop">
 
+					<!-- première boucle pour récupérer le contenu créé dans le back end pour la page -->
+
 					<?php if (have_posts())
 						{
 							while (have_posts())
@@ -43,19 +45,36 @@ get_header(); ?>
 
 		<section  id="content-articles" role="main" class="boxes">
 
-			<?php  query_posts('showposts=9&category_name="APropos"' . '&paged=' . get_query_var('paged')) ; ?>
+			<?php
+				// query_posts('showposts=9&category_name="APropos"' . '&paged=' . get_query_var('paged')) ;  première manière d' écrire la query, mais je préfère celle ci-dessous
 
+				$args = array (
+											//"showposts" => 10,  cette ligne et la suivante sont équivalentes
+											"posts_per_page"   => 10,
+											"category_name" => "APropos",
+											 "paged" => $paged,
+										); // tous les arguments sont disponibles ici: http://codex.wordpress.org/Class_Reference/WP_Query
 
+			query_posts($args);		// c' est la query pour la catégorie à propos listée dans une page de titre "A propos". Il serait possible d' utiliser la catégorie dans le menu, mais c' est une mauvaise habitude. Il vaut mieux créer un template de page.
 
-			<?php while ( have_posts() )
+			 while ( have_posts() )
 					{
 					 	the_post();
 
 					  get_template_part( 'content', 'list-posts');
 
 					}; // end of the loop de la catégorie à propos ?>
+
+
 			<div class="clear"></div>
 		</section><!-- #content-article -->
+
+		<nav id="next-previous" class="page-navigation" role="navigation">
+	        <span class="previous"><?php next_posts_link('ANCIENS') ?> </span>
+			<span class="next"><?php previous_posts_link('NOUVEAUX') ?></span>
+		</nav>
+
+
 	</section><!-- #primary -->
 
 
