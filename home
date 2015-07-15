@@ -1,4 +1,4 @@
-get_header(); ?>
+
 
 	<section id="primary"     <?php //post_class('apropos'); ?>    role="main"     class="content-area"  >
 
