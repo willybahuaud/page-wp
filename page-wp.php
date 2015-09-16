@@ -52,18 +52,20 @@ get_header(); ?>
 											//"showposts" => 10,  cette ligne et la suivante sont équivalentes
 											"posts_per_page"   => 10,
 											"category_name" => "APropos",
-											 "paged" => $paged,
+											"paged" => $paged,
 										); // tous les arguments sont disponibles ici: http://codex.wordpress.org/Class_Reference/WP_Query
 
-			query_posts($args);		// c' est la query pour la catégorie à propos listée dans une page de titre "A propos". Il serait possible d' utiliser la catégorie dans le menu, mais c' est une mauvaise habitude. Il vaut mieux créer un template de page.
-
-			 while ( have_posts() )
-					{
-					 	the_post();
-
-					  get_template_part( 'content', 'list-posts');
-
-					}; // end of the loop de la catégorie à propos ?>
+			$about = new WP_Query($args);		// c' est la query pour la catégorie à propos listée dans une page de titre "A propos". Il serait possible d' utiliser la catégorie dans le menu, mais c' est une mauvaise habitude. Il vaut mieux créer un template de page.
+			// Mettre cette requête dans un nouvel objet WP_Query permet de toujours pouvoir récupérer la requête initiale (on ne l'écrase pas)…
+			// … et de pouvoir aussi utiliser cette nouvelle requête à plusieurs endroits
+			if ( $about->the_post() ) {
+				while ( $about->have_posts() ) {
+					$about->the_post();
+					get_template_part( 'content', 'list-posts');
+				} 
+			} 
+			wp_reset_postdata();
+			// end of the loop de la catégorie à propos ?>
 
 
 			<div class="clear"></div>
